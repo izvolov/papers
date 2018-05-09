@@ -17,51 +17,51 @@
 
 Для начала, чтобы показать, что я не просто теоретизирую, приведу сравнение моей поразрядной сортировки с `std::sort` и `boost::integer_sort`.
 
-<details><summary>8 бит, 100—1000 элементов</summary>
+<details><summary>График: 8 бит, 100—1000 элементов</summary>
 
 ![8 бит, 100—1000 элементов](8-bit-100-1000.png)
 </details>
-<details><summary>8 бит, 1000—10000 элементов</summary>
+<details><summary>График: 8 бит, 1000—10000 элементов</summary>
 
 ![8 бит, 1000—10000 элементов](8-bit-1000-10000.png)
 </details>
-<details><summary>8 бит, 10000—100000 элементов</summary>
+<details><summary>График: 8 бит, 10000—100000 элементов</summary>
 
 ![8 бит, 10000—100000 элементов](8-bit-10000-100000.png)
 </details>
-<details><summary>16 бит, 100—1000 элементов</summary>
+<details><summary>График: 16 бит, 100—1000 элементов</summary>
 
 ![16 бит, 100—1000 элементов](16-bit-100-1000.png)
 </details>
-<details><summary>16 бит, 1000—10000 элементов</summary>
+<details><summary>График: 16 бит, 1000—10000 элементов</summary>
 
 ![16 бит, 1000—10000 элементов](16-bit-1000-10000.png)
 </details>
-<details><summary>16 бит, 10000—100000 элементов</summary>
+<details><summary>График: 16 бит, 10000—100000 элементов</summary>
 
 ![16 бит, 10000—100000 элементов](16-bit-10000-100000.png)
 </details>
-<details><summary>32 бита, 100—1000 элементов</summary>
+<details><summary>График: 32 бита, 100—1000 элементов</summary>
 
 ![32 бита, 100—1000 элементов](32-bit-100-1000.png)
 </details>
-<details><summary>32 бита, 1000—10000 элементов</summary>
+<details><summary>График: 32 бита, 1000—10000 элементов</summary>
 
 ![32 бита, 1000—10000 элементов](32-bit-1000-10000.png)
 </details>
-<details><summary>32 бита, 10000—100000 элементов</summary>
+<details><summary>График: 32 бита, 10000—100000 элементов</summary>
 
 ![32 бита, 10000—100000 элементов](32-bit-10000-100000.png)
 </details>
-<details><summary>64 бита, 100—1000 элементов</summary>
+<details><summary>График: 64 бита, 100—1000 элементов</summary>
 
 ![64 бита, 100—1000 элементов](64-bit-100-1000.png)
 </details>
-<details><summary>64 бита, 1000—10000 элементов</summary>
+<details><summary>График: 64 бита, 1000—10000 элементов</summary>
 
 ![64 бита, 1000—10000 элементов](64-bit-1000-10000.png)
 </details>
-<details><summary>64 бита, 10000—100000 элементов</summary>
+<details><summary>График: 64 бита, 10000—100000 элементов</summary>
 
 ![64 бита, 10000—100000 элементов](64-bit-10000-100000.png)
 </details>
