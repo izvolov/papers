@@ -242,4 +242,4 @@ void radix_sort (RandomAccessIterator1 first, RandomAccessIterator1 last, Random
 
 Так что поразрядная сортировка — алгоритм, вполне подходящий для практического применения в боевом коде. Шах и мат, "академики"!
 
-Если интересна внутренняя реализация, то [код лежит здесь](https://github.com/izvolov/burst/tree/master/burst/algorithm/sorting).
+Если интересна внутренняя реализация, то [код лежит здесь](https://github.com/izvolov/burst/blob/master/include/burst/algorithm/detail/radix_sort.hpp).
