@@ -262,3 +262,5 @@ void g (Floating<I>) {}
 2. [Концепты из прототипа библиотеки диапазонов "range-v3"](https://github.com/ericniebler/range-v3/blob/master/include/range/v3/utility/concepts.hpp)
 3. [Библиотека "TICK"](http://pfultz2.github.io/Tick/doc/html/)
 4. [Статья "Concepts Without Concepts"](https://akrzemi1.wordpress.com/2016/03/21/concepts-without-concepts/)
+
+[К началу](#Концепты-для-отчаявшихся)

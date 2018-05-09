@@ -325,4 +325,4 @@ assert(s == "qwerty56");
 
 Полный исходный код [здесь](https://github.com/izvolov/burst/blob/master/include/burst/functional/part.hpp).
 
-[К содержанию](#Содержание)
+[К началу](#Элементы-функционального-программирования-в-c-частичное-применение)
