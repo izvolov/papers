@@ -694,7 +694,7 @@ auto copy (const void *, void *)
 Ссылки
 ------
 
-Все исходные коды доступны [у меня на гитхабе](https://github.com/izvolov/burst/blob/master/burst/container/dynamic_tuple.hpp).
+Все исходные коды доступны [у меня на гитхабе](https://github.com/izvolov/burst/blob/master/include/burst/container/dynamic_tuple.hpp).
 
 [К содержанию](#Содержание)
 
