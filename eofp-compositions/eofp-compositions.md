@@ -386,7 +386,7 @@ std::remove_if(v.begin(), v.end(), MEMBER(x) | equal_to(5));
 
 Этот подход хотя и может работать самостоятельно, но предназначен он в первую очередь для упрощения работы с алгоритмами и диапазонами.
 
-[Полный код со всеми подробностями](https://github.com/izvolov/burst/tree/master/burst/functional).
+[Полный код со всеми подробностями](https://github.com/izvolov/burst/tree/master/include/burst/functional).
 
 ## [Ссылки](#Содержание)
 
