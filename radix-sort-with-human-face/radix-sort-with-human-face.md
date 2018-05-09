@@ -17,42 +17,54 @@
 
 Для начала, чтобы показать, что я не просто теоретизирую, приведу сравнение моей поразрядной сортировки с `std::sort` и `boost::integer_sort`.
 
-<spoiler title="8 бит, 100—1000 элементов">
-<img src="https://habrastorage.org/files/7ff/c39/ce9/7ffc39ce9cdb4b679dee760a07a5b8ac.png"/>
-</spoiler>
-<spoiler title="8 бит, 1000—10000 элементов">
-<img src="https://habrastorage.org/files/fff/87c/15f/fff87c15fefd4fe0b1867ca537355bcb.png"/>
-</spoiler>
-<spoiler title="8 бит, 10000—100000 элементов">
-<img src="https://habrastorage.org/files/965/230/967/965230967ceb4285b1ad92f188c713d1.png"/>
-</spoiler>
-<spoiler title="16 бит, 100—1000 элементов">
-<img src="https://habrastorage.org/files/515/f59/c80/515f59c807674c6abe0bb3f055b3ad7d.png"/>
-</spoiler>
-<spoiler title="16 бит, 1000—10000 элементов">
-<img src="https://habrastorage.org/files/f76/3dd/771/f763dd771e8b41a8ac2e1af17b1346b9.png"/>
-</spoiler>
-<spoiler title="16 бит, 10000—100000 элементов">
-<img src="https://habrastorage.org/files/117/4da/642/1174da642f794c4cbe49120cc43765bf.png"/>
-</spoiler>
-<spoiler title="32 бита, 100—1000 элементов">
-<img src="https://habrastorage.org/files/3c4/100/762/3c410076203745cf9e8ce210dfdbab99.png"/>
-</spoiler>
-<spoiler title="32 бита, 1000—10000 элементов">
-<img src="https://habrastorage.org/files/a35/e08/dd2/a35e08dd2ae64dea9f5133d71ee0cd09.png"/>
-</spoiler>
-<spoiler title="32 бита, 10000—100000 элементов">
-<img src="https://habrastorage.org/files/a72/cb7/947/a72cb7947a12491b9e2fcd345be6d5b2.png"/>
-</spoiler>
-<spoiler title="64 бита, 100—1000 элементов">
-<img src="https://habrastorage.org/files/d51/a2e/3db/d51a2e3db6334b3a97dd77c8d77fd1de.png"/>
-</spoiler>
-<spoiler title="64 бита, 1000—10000 элементов">
-<img src="https://habrastorage.org/files/3da/20e/3b5/3da20e3b5e49434aa220e2afc0de35a9.png"/>
-</spoiler>
-<spoiler title="64 бита, 10000—100000 элементов">
-<img src="https://habrastorage.org/files/a74/ab3/9b1/a74ab39b1e9c4740afc735c23f77be1c.png"/>
-</spoiler>
+<details><summary>8 бит, 100—1000 элементов</summary>
+
+![8 бит, 100—1000 элементов](8-bit-100-1000.png)
+</details>
+<details><summary>8 бит, 1000—10000 элементов</summary>
+
+![8 бит, 1000—10000 элементов](8-bit-1000-10000.png)
+</details>
+<details><summary>8 бит, 10000—100000 элементов</summary>
+
+![8 бит, 10000—100000 элементов](8-bit-10000-100000.png)
+</details>
+<details><summary>16 бит, 100—1000 элементов</summary>
+
+![16 бит, 100—1000 элементов](16-bit-100-1000.png)
+</details>
+<details><summary>16 бит, 1000—10000 элементов</summary>
+
+![16 бит, 1000—10000 элементов](16-bit-1000-10000.png)
+</details>
+<details><summary>16 бит, 10000—100000 элементов</summary>
+
+![16 бит, 10000—100000 элементов](16-bit-10000-100000.png)
+</details>
+<details><summary>32 бита, 100—1000 элементов</summary>
+
+![32 бита, 100—1000 элементов](32-bit-100-1000.png)
+</details>
+<details><summary>32 бита, 1000—10000 элементов</summary>
+
+![32 бита, 1000—10000 элементов](32-bit-1000-10000.png)
+</details>
+<details><summary>32 бита, 10000—100000 элементов</summary>
+
+![32 бита, 10000—100000 элементов](32-bit-10000-100000.png)
+</details>
+<details><summary>64 бита, 100—1000 элементов</summary>
+
+![64 бита, 100—1000 элементов](64-bit-100-1000.png)
+</details>
+<details><summary>64 бита, 1000—10000 элементов</summary>
+
+![64 бита, 1000—10000 элементов](64-bit-1000-10000.png)
+</details>
+<details><summary>64 бита, 10000—100000 элементов</summary>
+
+![64 бита, 10000—100000 элементов](64-bit-10000-100000.png)
+</details>
 
 Замеры произведены на машине с процессором Core i7 3.40GHz. На ноутбуке с процессором Core 2 Duo 2,26GHz преимущество поразрядной сортировки ещё более очевидно.
 
