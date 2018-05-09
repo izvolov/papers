@@ -1,0 +1,403 @@
+Элементы функционального программирования в C++: композиции отображений
+=======================================================================
+
+<anchor>introduction</anchor>
+Стандартная библиотека языка C++ очень неплоха. Долгие годы стандартные алгоритмы верой и правдой служат простому плюсовику!
+
+Но вся отрасль бурно развивается, и язык C++ вместе с ней. Уже давно люди стали понимать, что как бы хороши ни были стандартные алгоритмы, у них есть большой недостаток: нулевая компонуемость. Иначе говоря, невозможно без дополнительных сложностей объединить в цепочку несколько алгоритмов преобразования, фильтрации, свёртки и т.д. и т.п.
+
+Существует несколько вариантов решения данной проблемы. Один из них — [ленивые вычисления и диапазоны](https://github.com/ericniebler/range-v3) — уже на подходе к стандартной библиотеке.
+
+Однако, и старые добрые алгоритмы пока рано списывать со счетов.
+
+В этой статье я хочу рассмотреть один из приёмов, который хоть и не является полноценным решением проблемы компонуемости алгоритмов, но вполне способен и упростить работу со старыми стандартными алгоритмами, и обязательно пригодится для работы с грядущими версиями стандарта языка C++.
+<cut />
+<anchor>contents</anchor>
+Содержание
+----------
+
+1. [Техника функциональных объектов](#functional-objects)
+2. [Простая композиция](#simple-composition)
+3. [Многопозиционная композиция](#nary-composition)
+4. [Дополнение](#appendix)
+5. [Заключение](#conclusion)
+
+<anchor>functional-objects</anchor>
+## [Техника функциональных объектов](#contents)
+
+Прежде, чем приступить непосредственно к сути, хочу затронуть технику, которая пока что не очень широко представлена в текущей стандартной библиотеке, но, судя по всему, будет достаточно распространена в STL2, по крайней мере, в той её части, где будут повелевать ленивые вычисления и диапазоны.
+
+Если вы опытный плюсовик, то можете смело [пропускать](#simple-composition) эту часть.
+
+Вы всё ещё здесь? Тогда представьте, что у нас есть набор контейнеров, и перед нами стоит трудная задача: записать размеры всех этих контейнеров в другой контейнер.
+
+<abbr title="Перегрузку с массивами для простоты опустим.">Напишем функцию</abbr>, которая возвращает размер контейнера:
+```cpp
+template <typename Container>
+constexpr decltype(auto) size (Container & container)
+{
+    return container.size();
+}
+```
+
+Теперь, казалось бы, ничто не мешает вызвать стандартный алгоритм `std::transform`.
+```cpp
+std::vector<std::vector<int>> containers{...};
+std::vector<std::size_t> sizes;
+std::transform(containers.begin(), containers.end(), std::back_inserter(sizes), size);
+```
+
+Но не тут-то было:
+```
+// Ошибка компиляции:
+//
+// couldn't deduce template parameter '_UnaryOperation'
+//     std::transform(containers.begin(), containers.end(), std::back_inserter(sizes), size);
+//                                                                                     ^~~~
+```
+
+`size` — это шаблонная функция. Конкретизируется шаблонная функция либо явно (в нашем случае это будет `size<std::vector<int>>`), либо в момент вызова. А просто запись `size` не позволяет компилятору понять, с какими аргументами данная функция будет вызываться.
+
+Эту проблему можно обойти, если объявить `size` не функцией, а <abbr title="Каждый раз, когда функциональный объект называют функтором, страдает какой-нибудь математик. Пожалейте математиков.">функциональным объектом</abbr>:
+```cpp
+struct size_fn
+{
+    template <typename Container>
+    constexpr decltype(auto) operator () (Container & container)
+    {
+        return container.size();
+    }
+};
+
+constexpr auto size = size_fn{};
+```
+
+Теперь больше никаких ошибок компиляции:
+```cpp
+std::transform(containers.begin(), containers.end(), std::back_inserter(sizes), size);
+```
+
+Конечно же, умудрённый опытом плюсовик скажет, что у функциональных объектов есть и определённые недостатки по сравнению с функциями. Но заострять на этом внимание мы сейчас не будем.
+
+<anchor>simple-composition</anchor>
+## [Простая композиция](#contents)
+
+Итак, техника освоена, рассмотрим более сложный жизненный пример.
+
+Представьте, что нам нужно достать из ассоциативного массива все связанные значения. Для этого можно применить уже знакомый нам алгоритм `std::transform`:
+```cpp
+std::map<std::string, double> m{...};
+std::vector<double> r;
+std::transform(m.begin(), m.end(), std::back_inserter(r), [] (const auto & p) {return p.second;});
+```
+
+Пока что всё достаточно просто. Короткая и понятная лямбда-функция, всё хорошо. Но если логика отображения усложнится, то ситуация резко ухудшится.
+
+Например, нужно взять не просто второй элемент пары, а вычислить квадратный корень из него, и результат округлить до ближайшего целого. Лямбда становится слишком длинной, придётся форматировать:
+```cpp
+std::transform(m.begin(), m.end(), std::back_inserter(r),
+    [] (const auto & p)
+    {
+        return std::lround(std::sqrt(p.second));
+    });
+```
+
+С другой стороны, наше намерение можно было бы выразить короче и нагляднее:
+```cpp
+std::transform(m.begin(), m.end(), std::back_inserter(r), get<1> | sqrt | lround);
+```
+
+Внимание привлекает запись `get<1> | sqrt | lround`. Данный синтаксис следует понимать так: взять элемент кортежа с индексом 1, взять квадратный корень из него и округлить до ближайшего целого. В точности то, что и требовалось.
+
+Схематично это можно изобразить так:
+![Простое отображение](https://habrastorage.org/web/b6d/d9e/571/b6dd9e57143248329637f716f41d0e4d.png)
+
+Реализовать функциональный объект `get` можно следующим образом:
+```cpp
+template <std::size_t Index>
+struct get_fn
+{
+    template <typename Tuple>
+    constexpr decltype(auto) operator () (Tuple && t) const
+    {
+        using std::get;
+        return get<Index>(std::forward<Tuple>(t));
+    }
+};
+
+template <std::size_t Index>
+constexpr auto get = get_fn<Index>{};
+```
+
+Функциональные объекты `sqrt` и `lround` предлагаю реализовать в качестве упражнения всем заинтересовавшимся.
+
+Сам же механизм композиции реализуется посредством соответствующего функционального объекта:
+```cpp
+template <typename L, typename R>
+struct compose_fn
+{
+    template <typename ... Ts>
+    constexpr decltype(auto) operator () (Ts && ... ts) const &
+    {
+        return l(r(std::forward<Ts>(ts)...));
+    }
+
+    template <typename ... Ts>
+    constexpr decltype(auto) operator () (Ts && ... ts) &
+    {
+        return l(r(std::forward<Ts>(ts)...));
+    }
+
+    template <typename ... Ts>
+    constexpr decltype(auto) operator () (Ts && ... ts) &&
+    {
+        return std::move(l)(std::move(r)(std::forward<Ts>(ts)...));
+    }
+
+    L l;
+    R r;
+};
+
+template <typename L, typename R>
+constexpr auto compose (L && l, R && r)
+    -> compose_fn<std::decay_t<L>, std::decay_t<R>>
+{
+    return {std::forward<L>(l), std::forward<R>(r)};
+}
+
+template <typename ... Ts, typename R>
+constexpr auto operator | (compose_fn<Ts...> l, R && r)
+{
+    return compose(std::forward<R>(r), std::move(l));
+}
+```
+
+Важно отметить, что в данной реализации функция `compose` применяет композицию справа налево, как принято в математике. Иначе говоря, `compose(f, g)(x)` эквивалентно `f(g(x))`.
+
+Оператор же меняет порядок композиции. То есть `(f | g)(x)` эквивалентно `g(f(x))`.
+
+Это сделано для того, чтобы не вводить в заблуждение программиста, знакомого с такими решениями, как [Boost Range Adaptors](http://www.boost.org/doc/libs/1_64_0/libs/range/doc/html/range/reference/adaptors/introduction.html), [range-v3](https://github.com/ericniebler/range-v3), а также с консольным конвеером.
+
+<anchor>nary-composition</anchor>
+## [Многопозиционная композиция](#contents)
+
+Пока что всё было легко и понятно. Но на этом мы не остановимся.
+
+Допустим, мы хотим отсортировать массив пар:
+```cpp
+std::vector<std::pair<int, type_with_no_ordering>> v{...};
+```
+
+Для второго элемента пары не задано отношение порядка (что понятно из его названия), поэтому сравнивать по нему не имеет смысла, более того, такое сравнение просто не скомпилируется. Поэтому сортировку запишем так:
+```cpp
+std::sort(v.begin(), v.end(), [] (const auto & l, const auto & r) {return l.first < r.first;});
+```
+
+Выглядит длинновато. Можно для красоты отформатировать.
+```cpp
+std::sort(v.begin(), v.end(),
+    [] (const auto & l, const auto & r)
+    {
+        return l.first < r.first;
+    });
+```
+
+На мой взгляд, это более удобно для чтения, но всё равно достаточно многословно.
+
+Можно ли упростить это выражение? Попробуем написать псевдокод, в котором словами выразим то, что мы хотим сделать:
+```cpp
+std::sort(v.begin(), v.end(), меньше_по_первому_элементу);
+```
+
+Нужное нам действие — сравнение по первому элементу — можно разделить на два логических этапа: взятие первого элемента от каждой пары и собственно сравнение.
+
+Для взятия первого элемента создадим функциональный объект на основе уже имеющегося `get`:
+```cpp
+constexpr auto first = get<0>;
+```
+
+Для собственно сравнения в СБШ уже есть подходящий инструмент: `std::less`.
+
+Но как скомпоновать эти функции вместе? Попробую наглядно проиллюстрировать проблему.
+
+Сравниватель алгоритма `std::sort` ожидает на вход два объекта.
+![Сравниватель](https://habrastorage.org/web/323/816/769/323816769f854d1cbb9599e4257378ec.png)
+
+И сам по себе `std::less` удовлетворяет этому условию.
+
+В то же время, `first` — одноместная функция. Он принимает только один аргумент. Не стыкуется:
+![Не стыкуется](https://habrastorage.org/web/8db/1d6/f2a/8db1d6f2a4d44b70a9e29846dfae40cb.png)
+
+Значит, мы не можем просто написать `first | std::less{}`.
+
+При этом результат, который мы хотим получить, должен выглядеть как-то так:
+![Результат](https://habrastorage.org/web/200/6d3/21c/2006d321cc5443879326b03a635c4810.png)
+
+То есть компоновать с функцией `std::less` мы должны весь этот блок:
+![Как компоновать](https://habrastorage.org/web/99c/4c4/75b/99c4c475bfe443feb543b7b29334c9b2.png)
+
+Если переводить мысли в код, то мы хотим получить следующую запись:
+```cpp
+std::sort(v.begin(), v.end(), each(first) | std::less<>{});
+```
+
+Но получается, что функция, порождённая записью `each(first)` должна не только принимать, но и возвращать сразу два значения, чтобы подать их на вход `std::less`. А в языке C++ функция не может вернуть более одного значения!
+
+Однако, решение есть. Нужно реализовать особую схему композиции для функционального объекта `each`.
+
+Сам функциональный объект `each` тривиален:
+```cpp
+template <typename UnaryFunction>
+struct each_fn
+{
+    UnaryFunction f;
+};
+
+template <typename UnaryFunction>
+constexpr auto each (UnaryFunction && f)
+    -> each_fn<std::decay_t<UnaryFunction>>
+{
+    return {std::forward<UnaryFunction>(f)};
+}
+```
+
+Это даже не совсем функциональный объект. Скорее, это специальный контейнер-тег, который при композиции будет сообщать механизму композиции о том, что композицию сохранённой внутри контейнера функции нужно провести не так, как обычно.
+
+А вот и сами механизмы композиции:
+```cpp
+template <typename L, typename R>
+struct each_compose_fn
+{
+    template <typename ... Ts>
+    constexpr decltype(auto) operator () (Ts && ... ts) const &
+    {
+        return l(r(std::forward<Ts>(ts))...);
+    }
+
+    template <typename ... Ts>
+    constexpr decltype(auto) operator () (Ts && ... ts) &
+    {
+        return l(r(std::forward<Ts>(ts))...);
+    }
+
+    template <typename ... Ts>
+    constexpr decltype(auto) operator () (Ts && ... ts) &&
+    {
+        return std::move(l)(r(std::forward<Ts>(ts))...);
+    }
+
+    L l;
+    R r;
+};
+
+template <typename UnaryFunction1, typename UnaryFunction2>
+constexpr auto compose (each_fn<UnaryFunction1> l, each_fn<UnaryFunction2> r)
+    -> each_fn<decltype(compose(l.f, r.f))>
+{
+    return {compose(std::move(l.f), std::move(r.f))};
+}
+
+template <typename L, typename UnaryFunction>
+constexpr auto compose (L && l, each_fn<UnaryFunction> r)
+    -> each_compose_fn<std::decay_t<L>, UnaryFunction>
+{
+    return {std::forward<L>(l), std::move(r.f)};
+}
+
+template <typename UnaryFunction, typename R>
+constexpr auto operator | (each_fn<UnaryFunction> l, R && r)
+{
+    return compose(std::forward<R>(r), std::move(l));
+}
+```
+
+Главное отличие от обычной композиции — в раскрытии списка аргументов.
+В функции `compose` раскрытие происходит так: `l(r(args...))`, а в `each_compose` — иначе: `l(r(args)...)`.
+
+Другими словами, в первом случае применяется одноместная функция к результату многоместной функции, а во втором случае — многоместная функция к результатам применения одноместной функции к каждому из входных параметров.
+
+Теперь мы можем компоновать многоместные функции с одноместными:
+```cpp
+std::sort(v.begin(), v.end(), each(first) | std::less<>{});
+std::lower_bound(v.begin(), v.end(), x, each(second) | std::greater<>{});
+
+// и т.п.
+```
+
+Это победа.
+
+<anchor>appendix</anchor>
+## [Дополнение](#contents)
+
+Многие отметят, что слишком накладно реализовывать для каждой функции, каждого свойства объекта и т.п. отдельный функциональный объект. И с этим невозможно не согласиться. Например, в одном из примеров выше было бы удобнее не реализовывать новые функциональные объекты для функций `lround` и `sqrt`, а использовать имеющиеся библиотечные. 
+
+Существует пусть и неидеальное, но рабочее решение данной проблемы — барабанная дробь — макросы.
+
+Например, для вызова функции-члена класса макрос можно реализовать так:
+```cpp
+#define MEM_FN(f)\
+    [] (auto && x, auto && ... args)\
+        -> decltype(auto)\
+    {\
+        return std::forward<decltype(x)>(x).f(std::forward<decltype(args)>(args)...);\
+    }
+```
+
+Использоваться он будет следующим образом:
+```cpp
+std::vector<std::vector<int>> containers{...};
+std::none_of(containers.begin(), containers.end(), MEM_FN(empty));
+```
+
+Аналогичные макросы можно реализовать и для вызова свободных функций:
+```cpp
+#define FN(f)\
+    [] (auto && ... args)\
+        -> decltype(auto)\
+    {\
+        return f(std::forward<decltype(args)>(args)...);\
+    }
+```
+
+И даже для доступа к членам класса:
+```cpp
+#define MEMBER(m)\
+    [] (auto && x)\
+        -> decltype(auto)\
+    {\
+        /* Тот самый случай, когда скобки вокруг возвращаемого выражения */\
+        /* действительно нужны */\
+        return (std::forward<decltype(x)>(x).m);\
+    }
+
+struct Class
+{
+    int x;
+};
+
+std::vector<Class> v{...};
+std::remove_if(v.begin(), v.end(), MEMBER(x) | equal_to(5));
+```
+
+Код местами упрошён, чтобы не вводить слишком много новых сущностей.
+
+<anchor>conclusion</anchor>
+## [Заключение](#contents)
+
+Для чего всё это нужно? Почему нельзя просто пользоваться лямбдами?
+
+Лябдами пользоваться можно и нужно. Но, к сожалению, лямбды зачастую порождают очень много дублирющегося кода. Бывает, что лямбды полностью повторяют друг друга. Бывает, что несколько лямбд отличаются совсем немного, но декомпозиции при этом они не поддаются.
+
+Описанный в данной статье подход позволяет собирать простые лямбды из "кубиков", снижая количество написанного вручную кода и, вследствие этого, уменьшая вероятность совершить ошибку при написании очередной лямбды.
+
+Этот подход хотя и может работать самостоятельно, но предназначен он в первую очередь для упрощения работы с алгоритмами и диапазонами.
+
+[Полный код со всеми подробностями](https://github.com/izvolov/burst/tree/master/burst/functional).
+
+<anchor>links</anchor>
+## [Ссылки](#contents)
+1. [Boost Range Adaptors](http://www.boost.org/doc/libs/1_64_0/libs/range/doc/html/range/reference/adaptors/introduction.html)
+2. [Ranges for the Standard Library](https://ericniebler.github.io/std/wg21/D4128.html)
+3. [atria::xform](https://github.com/Ableton/atria)
+
+[К началу](#introduction)
