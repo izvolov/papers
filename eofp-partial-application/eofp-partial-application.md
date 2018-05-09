@@ -323,6 +323,6 @@ assert(s == "qwerty56");
 4. Хорошо встраивается в существующую парадигму программирования на языке C++.
 5. Совместимо с инструментами, которые используются в стандартной библиотеке. Например, с `reference_wrapper` для сигнализирования о передаче параметров по ссылке (как в `std::make_tuple`, `std::bind`, `std::thread`), а также, что очень важно, с алгоритмами.
 
-» Полный исходный код [здесь](https://github.com/izvolov/burst/blob/master/burst/functional/part.hpp).
+Полный исходный код [здесь](https://github.com/izvolov/burst/blob/master/include/burst/functional/part.hpp).
 
 [К содержанию](#Содержание)
