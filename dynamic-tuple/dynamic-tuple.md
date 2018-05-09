@@ -659,32 +659,32 @@ auto copy (const void *, void *)
 
 <details><summary>Контейнеры размера 10</summary>
 
-![10](https://habrastorage.org/files/1c1/fa0/ad7/1c1fa0ad70234a508cb77229ebcf70cb.png)
+![10](containers-of-size-10.png)
 </details>
 
 <details><summary>Контейнеры размера 50</summary>
 
-![50](https://habrastorage.org/files/bf4/616/220/bf461622057f49319e654e31cdef5227.png)
+![50](containers-of-size-50.png)
 </details>
 
 <details><summary>Контейнеры размера 100</summary>
 
-![100](https://habrastorage.org/files/8a0/1fd/a95/8a01fda957204debb34508e9e3ee5170.png)
+![100](containers-of-size-100.png)
 </details>
 
 <details><summary>Контейнеры размера 200</summary>
 
-![200](https://habrastorage.org/files/8d6/43d/eb0/8d643deb05f440578b74163834181574.png)
+![200](containers-of-size-200.png)
 </details>
 
 <details><summary>Контейнеры размера 500</summary>
 
-![500](https://habrastorage.org/files/a4c/f73/0b4/a4cf730b42a7480c90ac19a50b9d4dfa.png)
+![500](containers-of-size-500.png)
 </details>
 
 <details><summary>Контейнеры размера 1000</summary>
 
-![1000](https://habrastorage.org/files/788/d77/2f0/788d772f03ae4f31be5e29526abbc628.png)
+![1000](containers-of-size-1000.png)
 </details>
 
 Графики подтверждают очевидное:
