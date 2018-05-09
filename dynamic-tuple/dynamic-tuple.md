@@ -657,32 +657,32 @@ auto copy (const void *, void *)
 
 А в качестве точки отсчёта времени доступа был взят `std::vector`.
 
-<details><summary>Контейнеры размера 10</summary>
+<details><summary>График: контейнеры размера 10</summary>
 
 ![10](containers-of-size-10.png)
 </details>
 
-<details><summary>Контейнеры размера 50</summary>
+<details><summary>График: контейнеры размера 50</summary>
 
 ![50](containers-of-size-50.png)
 </details>
 
-<details><summary>Контейнеры размера 100</summary>
+<details><summary>График: контейнеры размера 100</summary>
 
 ![100](containers-of-size-100.png)
 </details>
 
-<details><summary>Контейнеры размера 200</summary>
+<details><summary>График: контейнеры размера 200</summary>
 
 ![200](containers-of-size-200.png)
 </details>
 
-<details><summary>Контейнеры размера 500</summary>
+<details><summary>График: контейнеры размера 500</summary>
 
 ![500](containers-of-size-500.png)
 </details>
 
-<details><summary>Контейнеры размера 1000</summary>
+<details><summary>График: контейнеры размера 1000</summary>
 
 ![1000](containers-of-size-1000.png)
 </details><br/>
