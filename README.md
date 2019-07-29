@@ -28,3 +28,7 @@
 6.  [Манифест жёсткого программиста](solid-manifesto/solid-manifesto.md)
 
     О методологиях ведения разработки ПО и рабочих отношениях.
+
+7.  [CMake и C++ — братья навек](cmake-and-cpp-friendship-forever/cmake-and-cpp-friendship-forever.md)
+
+    О том, как подружить систему сборки CMake и язык C++ в рамках проекта заголовочной библиотеки.
