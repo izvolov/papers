@@ -29,8 +29,10 @@
 
 О методологиях ведения разработки ПО и рабочих отношениях.
 
-## [CMake и C++ — братья навек](cmake-and-cpp-friendship-forever)
+## [CMake и C++ — братья навек](cmake-and-cpp-friendship-forever/cmake-and-cpp-friendship-forever.md)
 
-Часть I, [О том, как подружить систему сборки CMake и язык C++ в рамках проекта заголовочной библиотеки](cmake-and-cpp-friendship-forever/cmake-and-cpp-friendship-forever.md).
+О том, как подружить систему сборки CMake и язык C++ в рамках проекта заголовочной библиотеки.
 
-Часть II, [О подготовке независимых идинообразных модулей и связывании их между собой](cmake-and-cpp-friendship-forever/cmake-and-cpp-friendship-forever-part-ii.md).
+## [C++ и CMake — братья навек, часть II](cmake-and-cpp-friendship-forever/cmake-and-cpp-friendship-forever-part-ii.md).
+
+О подготовке независимых идинообразных модулей и связывании их между собой.
