@@ -1,15 +1,15 @@
 Список публикаций
 =================
 
-## 29.02.2020 [Помоги компилятору помочь тебе](help-the-compiler-help-you/help-the-compiler-help-you.md).
+## 29.02.2020 [Помоги компилятору помочь тебе](help-the-compiler-help-you/help-the-compiler-help-you.md)
 
 О том, как максимально использовать потенциал компилятора в выявлении ошибок.
 
-## 29.02.2020 [Модульное тестирование, наука и математика](unit-testing-science-and-math/unit-testing-science-and-math.md).
+## 29.02.2020 [Модульное тестирование, наука и математика](unit-testing-science-and-math/unit-testing-science-and-math.md)
 
 Об осмысленном подходе к модульному тестированию.
 
-## 12.08.2019 [C++ и CMake — братья навек, часть II](cmake-and-cpp-friendship-forever/cmake-and-cpp-friendship-forever-part-ii.md).
+## 12.08.2019 [C++ и CMake — братья навек, часть II](cmake-and-cpp-friendship-forever/cmake-and-cpp-friendship-forever-part-ii.md)
 
 О подготовке независимых идинообразных модулей и связывании их между собой.
 
