@@ -1444,7 +1444,3 @@ prog.cc:4:15: warning: logical 'and' of equal expressions [-Wlogical-op]
 
 1. [Документация к компилятору GCC](https://gcc.gnu.org/onlinedocs/gcc-9.2.0/gcc/)
 2. [Документация к компилятору Clang](https://clang.llvm.org/docs/UsersManual.html)
-
-----
-
-[К началу](#помоги-компилятору-помочь-тебе)
